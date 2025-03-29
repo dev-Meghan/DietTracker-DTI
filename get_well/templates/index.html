@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Diet Tracker</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script>
+        function restrictDate() {
+            var dateInput = document.getElementById('date');
+            var today = new Date();
+            var pastDate = new Date();
+            pastDate.setDate(today.getDate() - 7);
+
+            var todayStr = today.toISOString().split('T')[0];
+            var pastDateStr = pastDate.toISOString().split('T')[0];
+
+            dateInput.setAttribute('max', todayStr);
+            dateInput.setAttribute('min', pastDateStr);
+        }
+
+        function changeBackgroundColor() {
+            var body = document.body;
+            var colors = ['#3cd761', '#87CEEB']; // Pastel green and sky blue
+            var currentColor = 0;
+
+            setInterval(function() {
+                body.style.transition = 'background-color 3s ease';
+                body.style.backgroundColor = colors[currentColor];
+                currentColor = (currentColor + 1) % colors.length;
+            }, 5000); // Change color every 8 seconds
+        }
+    </script>
+    <style>
+        body {
+            background-color: #77d777; /* Initial color set to teal */
+            font-family: 'Arial', sans-serif;
+            transition: background-color 5s ease;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        .card {
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            background-color: #ffffff; /* Updated color */
+        }
+        .btn-primary {
+            background-color: #3cd761; /* Updated color */
+            border-color: #28a745; /* Updated color */
+        }
+        .card-header {
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            color: #067979; /* Updated color */
+        }
+        .form-group label {
+            font-weight: bold;
+            color: red; /* Side headings color set to red */
+        }
+        .logo {
+            display: block;
+            margin: 0 auto 20px;
+            width: 100px;
+        }
+    </style>
+</head>
+<body onload="restrictDate(); changeBackgroundColor();">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <!-- Removed logo -->
+                    <div class="card-header">Diet Tracker</div>
+                    <form action="/submit_diet" method="POST">
+                        <div class="form-group">
+                            <label for="food">Food:</label>
+                            <input type="text" id="food" name="food" class="form-control" placeholder="Enter food" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="quantity">Quantity (grams):</label>
+                            <input type="number" id="quantity" name="quantity" class="form-control" placeholder="Enter quantity" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="type">Type of Food:</label>
+                            <select id="type" name="type" class="form-control" required>
+                                <option value="" disabled selected>Select type</option>
+                                <option value="rice">Rice Item</option>
+                                <option value="junk">Junk Food</option>
+                                <option value="sugar">Sugary Sweets</option>
+                                <option value="vegetables">Vegetables and Fruits</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="date">Date:</label>
+                            <input type="date" id="date" name="date" class="form-control" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">Submit</button>
+                    </form>
+                    <div class="text-center mt-3">
+                        <a href="/report" class="btn btn-link">View Report</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

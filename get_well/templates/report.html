@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Diet Report</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            background-color: #77d777; /* Initial color set to teal */
+            font-family: 'Arial', sans-serif;
+            transition: background-color 5s ease;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        .card {
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+        .chart-container {
+            position: relative;
+            margin: auto;
+            height: 300px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body class="container-fluid">
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h2>Your Diet Report</h2>
+                </div>
+                <div class="card-body">
+                    <div class="text-center mb-4">
+                        <h4>Name: {{ name }}</h4>
+                        <h4>Age: {{ age }}</h4>
+                    </div>
+                    <table class="table table-hover">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>Food</th>
+                                <th>Calories</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for food, calories, food_type, date in diet_data %}
+                            <tr>
+                                <td>{{ food }}</td>
+                                <td>{{ calories }}</td>
+                                <td>{{ date }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <div class="mt-4 text-center">
+                        <h4>Calorie Distribution</h4>
+                        <div class="chart-container">
+                            <canvas id="pieChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="mt-4 text-center">
+                        <h4>Calories Consumed Over Time</h4>
+                        <div class="chart-container">
+                            <canvas id="barChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <h4>Potential Diseases</h4>
+                        <p>{{ diseases }}</p>
+                    </div>
+                    <div class="mt-4">
+                        <h4>Suggested Diet</h4>
+                        <p>{{ suggestions }}</p>
+                    </div>
+                    <div class="text-center mt-3">
+                        <a href="/" class="btn btn-primary">Back</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var pieCtx = document.getElementById('pieChart').getContext('2d');
+            new Chart(pieCtx, {
+                type: 'pie',
+                data: {
+                    labels: [{% for food in foods %}"{{ food }}",{% endfor %}],
+                    datasets: [{
+                        data: [{% for calorie in calories %}{{ calorie }},{% endfor %}],
+                        backgroundColor: ['#ff6384', '#36a2eb', '#cc65fe', '#ffce56', '#4bc0c0', '#9966ff', '#ff9f40']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                }
+            });
+
+            var barCtx = document.getElementById('barChart').getContext('2d');
+            new Chart(barCtx, {
+                type: 'bar',
+                data: {
+                    labels: [{% for date in unique_dates %}"{{ date }}",{% endfor %}],
+                    datasets: [{
+                        label: 'Calories',
+                        data: [{% for date in unique_dates %}{{ date_calories[date] }},{% endfor %}],
+                        backgroundColor: '#36a2eb',
+                        borderColor: '#36a2eb',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

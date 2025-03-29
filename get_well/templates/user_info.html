@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Information</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        body {
+            background-color: #77d777; /* Initial color set to teal */
+            font-family: 'Arial', sans-serif;
+            transition: background-color 5s ease; /* Updated smooth transition */
+        }
+        .container {
+            margin-top: 50px;
+        }
+        .card {
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+        .btn-primary {
+            background-color: #77DD77;
+            border-color: #007bff;
+        }
+        .card-header {
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+        }
+        .form-group label {
+            font-weight: bold;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-family: 'Times New Roman';
+            font-size: 200%;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px #000000;
+        }
+        .form-control {
+            border: 2px solid #007bff;
+            border-radius: 5px;
+            padding: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+        .form-control:focus {
+            border-color: #0056b3;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <h1>GET WELL</h1>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header"style="font-family:'Times New Roman'">User Information</div>
+                    <form action="/submit_user_info" method="POST">
+                        <div class="form-group">
+                            <label for="name">Name:</label>
+                            <input type="text" id="name" name="name" placeholder="Please Enter Your Name"class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="age">Age:</label>
+                            <input type="number" id="age" name="age" placeholder="Please Enter Your Age"class="form-control" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+<script>
+    document.querySelector('form').addEventListener('submit', function(event) {
+        var ageInput = document.getElementById('age');
+        if (ageInput.value <= 0) {
+            event.preventDefault();
+            alert('Please enter a valid age.');
+        }
+    });
+
+    // Script to change background color between green and sky blue every 5 seconds
+    setInterval(function() {
+        var body = document.body;
+        if (body.style.backgroundColor === 'rgb(119, 221, 119)') { // green
+            body.style.backgroundColor = '#87CEEB'; // sky blue
+        } else {
+            body.style.backgroundColor = '#77DD77'; // green
+        }
+    }, 5000);
+</script>
+
+
